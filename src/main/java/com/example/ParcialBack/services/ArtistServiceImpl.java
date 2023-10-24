@@ -51,11 +51,10 @@ public class ArtistServiceImpl implements ArtistService{
     @Override
     @Transactional
     public void delete(Integer id) {
-        try {
-            artistRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Artist not found");
-        }
+        val artist = artistRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Artist not found"));
+        albumRepository.deleteAllByArtistId(artist);
+        artistRepository.deleteById(id);
     }
 
     @Override
